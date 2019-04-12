@@ -1,0 +1,8 @@
+{
+  "development": {
+    "dataSourceDirectory": "data"
+  },
+  "test": {
+    "dataSourceDirectory": "test/data"
+  }
+}

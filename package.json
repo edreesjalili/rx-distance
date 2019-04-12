@@ -1,0 +1,25 @@
+{
+  "name": "rx-distance",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "alasql": "^0.4.11",
+    "csv-parser": "^2.2.0",
+    "esm": "^3.2.22",
+    "hapi": "^18.1.0",
+    "hapi-align-json": "^2.0.0",
+    "haversine": "^1.1.1"
+  },
+  "devDependencies": {
+    "@hapi/code": "^5.3.1",
+    "@hapi/lab": "^18.1.1",
+    "nodemon": "^1.18.11"
+  },
+  "scripts": {
+    "test": "lab --colors",
+    "start": "nodemon --exec \"node -r esm index.js\""
+  },
+  "author": "Edrees Jalili",
+  "license": "ISC"
+}
