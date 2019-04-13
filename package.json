@@ -17,7 +17,7 @@
     "nodemon": "^1.18.11"
   },
   "scripts": {
-    "test": "mocha --require esm",
+    "test": "mocha --require esm -c --diff",
     "start": "nodemon --exec \"node -r esm index.js\""
   },
   "author": "Edrees Jalili",
