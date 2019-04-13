@@ -1,4 +1,7 @@
 import { expect } from "chai";
+import { createReadStream } from "fs";
+import path from "path";
+import csv from "csv-parser";
 import { init } from "../lib/server";
 
 const API_ROUTE = "/api/v1/pharmacies";
@@ -24,23 +27,22 @@ describe("API /pharmacies", () => {
       });
     });
 
-    it("responds with status code 200", async () =>
-      expect(subject.statusCode).to.equal(200));
-
     it("responds with all available pharmacies", async () => {
-      allPharmacies = await getAllPharmacies();
-      expect(subject.payload).to.equal(allPharmacies);
+      const allPharmacies = await getAllPharmacies();
+      expect(subject.statusCode).to.equal(200);
+      expect(JSON.parse(subject.payload)).to.eql(allPharmacies);
     });
   });
 });
 
-const getAllPharmacies = () =>
-  new Promise((resolve, reject) => {
-    const entries = [];
+function getAllPharmacies() {
+  return new Promise((resolve, reject) => {
+    let entries = [];
 
-    fs.createReadStream(path.join(__dirname, "data", "pharmacies.csv"))
+    createReadStream(path.join(__dirname, "data", "pharmacies.csv"))
       .pipe(csv())
       .on("data", data => entries.push(data))
       .on("error", reject)
       .on("end", () => resolve(entries));
   });
+}
