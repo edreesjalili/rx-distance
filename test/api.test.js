@@ -1,7 +1,5 @@
-const Lab = require("@hapi/lab");
-const { expect } = require("@hapi/code");
-const { afterEach, beforeEach, describe, it } = (exports.lab = Lab.script());
-const { init } = require("../lib/server");
+import { expect } from "chai";
+import { init } from "../lib/server";
 
 describe("API /pharmacies", () => {
   let server;
