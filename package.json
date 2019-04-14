@@ -20,9 +20,13 @@
     "nodemon": "^1.18.11"
   },
   "scripts": {
-    "test": "mocha",
-    "start": "nodemon --exec \"node -r esm index.js\""
+    "start": "node -r esm index.js",
+    "start:dev": "nodemon --exec npm start",
+    "test": "mocha"
   },
   "author": "Edrees Jalili",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": "11.14.0"
+  }
 }
