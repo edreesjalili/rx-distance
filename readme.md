@@ -4,6 +4,8 @@ A simple Hapi server used to find the nearest pharmacy when provided a latitude 
 
 In order to avoid an end user from setting up a DB on their machine, I decided to just go with a client-side psuedo-database implementation, aka [AlaSQL](http://alasql.org/).
 
+heroku: http://protected-temple-28543.herokuapp.com/api/v1/pharmacies
+
 ## Endpoints
 
 - http://localhost:3000/api/v1/pharmacies - Gets all pharmacies
