@@ -13,11 +13,12 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "eslint": "^5.16.0",
     "mocha": "^6.1.3",
     "nodemon": "^1.18.11"
   },
   "scripts": {
-    "test": "mocha --require esm --require mocha.env.js -c --diff",
+    "test": "mocha",
     "start": "nodemon --exec \"node -r esm index.js\""
   },
   "author": "Edrees Jalili",

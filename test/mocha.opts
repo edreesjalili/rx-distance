@@ -1,0 +1,5 @@
+--require esm
+--require test/mocha.env.js
+--color
+--diff
+--exclude *.env.js
