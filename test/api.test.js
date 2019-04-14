@@ -34,7 +34,8 @@ describe("API /pharmacies", () => {
       route: PHARMACY_API_ROUTE
     };
 
-    it("responds with status code 200 when there is a trailing /", async () => {
+    it("ignores trailing /", async () => {
+      options.route += "/";
       const subject = await sendRequest({ ...options });
       expect(subject.statusCode).to.eq(200);
     });
@@ -53,11 +54,11 @@ describe("API /pharmacies", () => {
     let latitude = 38.897147;
     let longitude = -77.043934;
     // calculated distances using https://www.geodatasource.com/distance-calculator
-    const boundedDistances = [0.34, 86.83, 899.12];
+    const boundedDistances = [0.34, 3.76, 69.19];
     let options;
 
     async function getRxWithDistances() {
-      return (await getAllPharmacies()).map((rx, index) => {
+      return (await getSortedPharmacies()).map((rx, index) => {
         return { distance: boundedDistances[index], ...rx };
       });
     }
@@ -66,6 +67,73 @@ describe("API /pharmacies", () => {
       options = {
         route: `${PHARMACY_API_ROUTE}/nearest`
       };
+    });
+
+    describe("with invalid query parameters", () => {
+      const respondsWith400 = "responds with status code 400";
+      const invalidQueries = [
+        {
+          case: "when there are no query parameters",
+          query: {}
+        },
+        {
+          case: "when the latitude is missing",
+          query: {
+            longitude: 0
+          }
+        },
+        {
+          case: "when the longitude is missing",
+          query: {
+            latitude: 0
+          }
+        },
+        {
+          case: "when the latitude is greater than 85",
+          query: {
+            latitude: 100
+          }
+        },
+        {
+          case: "when the latitude is less than 85",
+          query: {
+            latitude: -100
+          }
+        },
+        {
+          case: "when the longitude is greater than 180",
+          query: {
+            longitude: 200
+          }
+        },
+        {
+          case: "when the longitude is less than -180",
+          query: {
+            longitude: -200
+          }
+        },
+        {
+          case: "when the limit is less than 1",
+          query: {
+            longitude: 0,
+            longitude: -200,
+            limit: 0
+          }
+        },
+        {
+          case: "when the longitude is greater than 100",
+          query: {
+            longitude: 0,
+            longitude: 0,
+            limit: 101
+          }
+        }
+      ].forEach(invalidQuery => {
+        it(`${respondsWith400} ${invalidQuery.case}`, async () => {
+          const subject = await sendRequest({ ...options });
+          expect(subject.statusCode).to.equal(400);
+        });
+      });
     });
 
     describe("with valid query parameters", () => {
@@ -85,11 +153,11 @@ describe("API /pharmacies", () => {
       });
 
       describe("with a limit query parameter", () => {
-        it("returns a list of pharmacies sorted by distance", async () => {
-          options.query.limit = 20;
+        it("returns a limited list of pharmacies sorted by distance", async () => {
+          options.query.limit = 2;
 
           const subject = await sendRequest({ ...options });
-          const expected = await getRxWithDistances();
+          const expected = (await getRxWithDistances()).slice(0, 2);
 
           expect(subject.statusCode).to.equal(200);
           expect(JSON.parse(subject.payload)).to.eql(expected);
@@ -117,7 +185,12 @@ function getAllPharmacies() {
     let entries = [];
 
     createReadStream(path.join(__dirname, "data", "pharmacies.csv"))
-      .pipe(csv())
+      .pipe(
+        csv({
+          mapValues: ({ header, index, value }) =>
+            isNaN(value) ? value.trim() : Number(value)
+        })
+      )
       .on("data", data => entries.push(data))
       .on("error", reject)
       .on("end", () => resolve(entries));
