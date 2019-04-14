@@ -7,9 +7,9 @@
     "alasql": "^0.4.11",
     "csv-parser": "^2.2.0",
     "esm": "^3.2.22",
+    "geodesy": "^2.0.1",
     "hapi": "^18.1.0",
-    "hapi-align-json": "^2.0.0",
-    "haversine": "^1.1.1"
+    "hapi-align-json": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
