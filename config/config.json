@@ -1,11 +1,13 @@
 {
   "development": {
-    "dataSourceDirectory": "data"
+    "dataSourceDirectory": "data",
+    "port": 3000
   },
   "production": {
     "dataSourceDirectory": "data"
   },
   "test": {
-    "dataSourceDirectory": "test/data"
+    "dataSourceDirectory": "test/data",
+    "port": 3000
   }
 }
